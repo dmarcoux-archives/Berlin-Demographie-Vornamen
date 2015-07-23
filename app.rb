@@ -1,4 +1,6 @@
 # encoding: utf-8
+require "sinatra"
+
 class BDV_App < Sinatra::Application
 
 end

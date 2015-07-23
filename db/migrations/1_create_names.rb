@@ -6,6 +6,7 @@ Sequel.migration do
             Integer :count, null: false
             String :gender, null: false, size: 1, fixed: true
             String :neighborhood, null: false, size: 30
+            index [:name, :neighborhood], unique: true
         end
     end
 

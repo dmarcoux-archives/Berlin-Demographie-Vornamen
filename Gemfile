@@ -1,7 +1,6 @@
 source 'https://rubygems.org'
 
 gem "rake"
-gem "dotenv"
 
 gem "sinatra"
 
@@ -10,4 +9,5 @@ gem "sequel"
 
 group :development, :test do
     gem "pry"
+    gem "dotenv"
 end
