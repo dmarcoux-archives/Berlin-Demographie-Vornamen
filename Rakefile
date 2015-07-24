@@ -19,6 +19,9 @@ namespace :db do
     desc "Seed the database"
     task :seed do
         seed_file = File.join('db/seeds/seeds.rb')       
-        load(seed_file) if File.exist?(seed_file)
+        if File.exist?(seed_file)
+            puts "Seeding the database"
+            load(seed_file)
+        end
     end
 end
