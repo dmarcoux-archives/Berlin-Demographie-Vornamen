@@ -11,9 +11,10 @@ require_relative "../../models/name"
 # The CSV files are in db/seeds/
 Dir.chdir("db/seeds/")
 
+# Open the CSV files
 data_files = Dir.glob("*.csv").map { |filename| CSV.open(filename, mode = "r") }
 
-data_files.each { |data_file|
+data_files.each do |data_file|
     # The name of the neighborhood is the name of the file. Berlin Open Data seems to use this standard
     neighborhood = data_file.path.gsub(".csv", "")
 
@@ -21,11 +22,15 @@ data_files.each { |data_file|
     names = data_file.readlines()[1..-1]
 
     # Insert the names in the database
-    names.each do |name|
+    names.each_with_index do |name, index|
         fields = name[0].split(";")
+
         Name.create(name: fields[0],
                     count: fields[1],
                     gender: fields[2],
                     neighborhood: neighborhood)
     end
-}
+
+    # Providing some feedback to the user
+    puts "#{neighborhood.capitalize}: #{names.length} names inserted"
+end
