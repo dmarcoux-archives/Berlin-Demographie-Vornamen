@@ -5,12 +5,21 @@ class BDV_App < Sinatra::Application
     end
 
     get "/names" do
-        #TODO params
+        # Retrieve parameters and convert them to the good type, but also get rid of nil
+        name = params[:name].to_s
         count = params[:count].to_i
-        gender = params[:gender]
-        neighborhood = params[:neighborhood]
+        gender = params[:gender].to_s
+        neighborhood = params[:neighborhood].to_s
+
+        names = DB[:names]
+        names = names.filter(name: name) unless name.empty?
+        names = names.filter(count: count) unless count <= 0
+        names = names.filter(gender: gender) unless gender.empty?
+        names = names.filter(neighborhood: neighborhood) unless neighborhood.empty?
 
         status 200
+        # TODO implement pagination
+        names.limit(100).all.to_json
     end
 
     get "/names/:id" do |id|
