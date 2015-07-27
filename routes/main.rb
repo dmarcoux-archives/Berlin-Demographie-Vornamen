@@ -4,6 +4,7 @@ class BDV_App < Sinatra::Application
         content_type :json
     end
 
+    # Retrieve a list of names
     get "/names" do
         # Retrieve parameters and convert them to the good type, but also get rid of nil
         name = params[:name].to_s
@@ -22,6 +23,7 @@ class BDV_App < Sinatra::Application
         names.limit(100).all.to_json
     end
 
+    # Retrieve a specific name
     get "/names/:id" do |id|
         id = id.to_i
         if id > 0
@@ -35,5 +37,20 @@ class BDV_App < Sinatra::Application
                 description: "A valid Integer must be provided"
             }.to_json
         end
+    end
+
+    # Create a new name
+    post "/names" do
+
+    end
+
+    # Update a specific name
+    put "/names/:id" do |id|
+
+    end
+
+    # Delete a specific name
+    delete "/names/:id" do |id|
+
     end
 end
