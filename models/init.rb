@@ -3,8 +3,9 @@ require "sequel"
 
 DB = Sequel.connect(ENV["DATABASE_URL"])
 
-# Load the JSON Serializer plugin for all models
+# Load plugins for all models
 Sequel::Model.plugin :json_serializer
+Sequel::Model.plugin :validation_helpers
 
 # Load all models
 require_relative "name"

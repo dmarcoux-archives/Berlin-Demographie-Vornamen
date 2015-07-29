@@ -18,9 +18,8 @@ class BDV_App < Sinatra::Application
         names = names.filter(gender: gender) unless gender.empty?
         names = names.filter(neighborhood: neighborhood) unless neighborhood.empty?
 
-        status 200
         # TODO implement pagination
-        names.limit(100).all.to_json
+        [200, names.limit(100).all.to_json]
     end
 
     # Retrieve a specific name
@@ -28,14 +27,13 @@ class BDV_App < Sinatra::Application
         id = id.to_i
         if id > 0
             name = Name.find(id: id)
-            status 200
-            name.to_json
+            if name
+                [200, name.to_json]
+            else
+                [404, { message: "Not found", description: "Name ##{id} doesn't exist" }.to_json]
+            end
         else
-            status 400
-            {
-                message: "Invalid id parameter.",
-                description: "A valid Integer must be provided"
-            }.to_json
+            [400, { message: "Invalid id parameter.", description: "A valid Integer must be provided" }.to_json]
         end
     end
 
