@@ -8,4 +8,5 @@ class BDV_App < Sinatra::Application
 end
 
 require_relative "models/init"
-require_relative "routes/init"
+# Load all files under lib and routes
+Dir["#{__dir__}/lib/*.rb", "#{__dir__}/routes/*.rb"].each { |file| require file }
