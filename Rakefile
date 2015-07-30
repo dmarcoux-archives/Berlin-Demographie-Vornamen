@@ -1,4 +1,5 @@
 require "rake"
+require "rake/testtask"
 require "dotenv/tasks"
 
 namespace :db do
@@ -24,4 +25,12 @@ namespace :db do
             load(seed_file)
         end
     end
+end
+
+# Executing "rake test" will run all tests
+Rake::TestTask.new do |t|
+  t.pattern = "spec/**/*_spec.rb"
+  t.verbose = true
+
+  # TODO clean database tables
 end

@@ -1,6 +1,5 @@
 # encoding: utf-8
 class Name < Sequel::Model
-    # TODO tests
     def validates_neighborhood
         unless (neighborhood || "").empty?
             valid_neighborhoods = %w{friedrichshain-kreuzberg
@@ -23,7 +22,7 @@ class Name < Sequel::Model
         end
     end
 
-    # TODO tests
+    # TODO transfer in a helper? transfer specs if it happens...
     # PARAMS (Integer, Symbol)
     def validates_greater_than(value, column)
         column = send(column)
@@ -32,10 +31,11 @@ class Name < Sequel::Model
             if column <= value
                 errors.add(column, "must be greater than #{value}")
             end
+        else
+            errors.add(column, "must be of type Integer to be validated")
         end
     end
 
-    # TODO tests
     def validate
         super
         validates_presence [:name, :count, :gender, :neighborhood]

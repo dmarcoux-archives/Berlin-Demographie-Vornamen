@@ -25,10 +25,8 @@ data_files.each do |data_file|
     names.each_with_index do |name, index|
         fields = name[0].split(";")
 
-        Name.create(name: fields[0],
-                    count: fields[1],
-                    gender: fields[2],
-                    neighborhood: neighborhood)
+        # The model doesn't have to be validated, the data will be validated by the database anyway
+        Name.new(name: fields[0], count: fields[1], gender: fields[2], neighborhood: neighborhood).save(validate: false)
     end
 
     # Providing some feedback to the user
