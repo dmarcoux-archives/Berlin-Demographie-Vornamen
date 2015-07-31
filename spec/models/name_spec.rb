@@ -1,6 +1,6 @@
 describe Name do
     before do
-        subject(:name) { Name.new }
+        @name = Name.new
     end
 
     describe "#validates_neighborhood" do
@@ -18,18 +18,18 @@ describe Name do
                                        neukoelln
                                        steglitz-zehlendorf} }
 
-        context "when neighborhood is nil or an empty string" do
+        describe "when neighborhood is nil or an empty string" do
             it "" do
 
             end
         end
 
-        context "when neighborhood contains a string" do
-            context "which is a valid neighborhood" do
+        describe "when neighborhood contains a string" do
+            describe "which is a valid neighborhood" do
 
             end
 
-            context "which isn't a valid neighborhood" do
+            describe "which isn't a valid neighborhood" do
 
             end
         end
