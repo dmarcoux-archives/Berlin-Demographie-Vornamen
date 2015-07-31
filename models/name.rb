@@ -1,4 +1,3 @@
-# encoding: utf-8
 class Name < Sequel::Model
     def validates_neighborhood
         unless (neighborhood || "").empty?

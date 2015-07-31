@@ -1,4 +1,3 @@
-# encoding: utf-8
 require "sinatra"
 
 set :root, File.dirname(__FILE__)

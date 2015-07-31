@@ -1,4 +1,3 @@
-# encoding: utf-8
 class BDV_App < Sinatra::Application
     before do
         content_type :json
