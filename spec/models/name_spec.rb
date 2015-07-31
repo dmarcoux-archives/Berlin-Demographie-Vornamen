@@ -1,3 +1,5 @@
+require_relative "../spec_helper"
+
 describe Name do
     before do
         @name = Name.new
