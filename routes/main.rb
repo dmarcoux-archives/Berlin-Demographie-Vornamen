@@ -72,6 +72,10 @@ class BDV_App < Sinatra::Application
 
     # Delete a specific name
     delete "/names/:id" do |id|
+        unless @name.destroy
+            return [500, { message: "Name deletion error", description: "Name ##{id} couldn't be deleted" }.to_json]
+        end
 
+        [200, { message: "Name deleted", description: "Name ##{id} deleted successfully" }.to_json]
     end
 end
