@@ -1,15 +1,20 @@
 class BDV_App < Sinatra::Application
+    helpers RoutesUtils
+
     before do
         content_type :json
     end
 
+    # TODO Authentication
+
     # Retrieve a list of names
     get "/names" do
-        # Retrieve parameters and convert them to the good type, but also get rid of nil
-        name = params[:name].to_s
-        count = params[:count].to_i
-        gender = params[:gender].to_s
-        neighborhood = params[:neighborhood].to_s
+        sanitize_default_params(params)
+
+        name = params[:name]
+        count = params[:count]
+        gender = params[:gender]
+        neighborhood = params[:neighborhood]
 
         names = DB[:names]
         names = names.filter(name: name) unless name.empty?
@@ -23,27 +28,55 @@ class BDV_App < Sinatra::Application
 
     # Retrieve a specific name
     get "/names/:id" do |id|
+        # DRY code (in a before)
         id = id.to_i
-        if id > 0
-            name = Name.find(id: id)
-            if name
-                [200, name.to_json]
-            else
-                [404, { message: "Not found", description: "Name ##{id} doesn't exist" }.to_json]
-            end
-        else
-            [400, { message: "Invalid id parameter.", description: "A valid Integer must be provided" }.to_json]
+
+        if id <= 0
+            [400, { message: "Invalid id parameter", description: "A valid Integer greater than 0 must be provided" }.to_json]
         end
+
+        unless name = Name.find(id: id)
+            [404, { message: "Not found", description: "Name ##{id} doesn't exist" }.to_json]
+        end
+
+        [200, name.to_json]
     end
 
     # Create a new name
     post "/names" do
+        sanitize_default_params(params)
 
+        name = Name.new(params)
+        if name.save
+            # TODO location header for the newly created name...
+            [200, name.to_json]
+        else
+            [422, name.errors.to_json]
+        end
     end
 
     # Update a specific name
     put "/names/:id" do |id|
+        id = id.to_i
 
+        if id <= 0
+            [400, { message: "Invalid id parameter", description: "A valid Integer greater than 0 must be provided" }.to_json]
+        end
+
+        unless name = Name.find(id: id)
+            [404, { message: "Not found", description: "Name ##{id} doesn't exist" }.to_json]
+        end
+
+        sanitize_params(params)
+        if params.empty?
+            [400, { message: "Parameters needed", description: "Provide valid parameters to update Name ##{id}" }.to_json]
+        end
+
+        unless name.update(params)
+            [422, name.errors.to_json]
+        end
+
+        [200, name.to_json]
     end
 
     # Delete a specific name

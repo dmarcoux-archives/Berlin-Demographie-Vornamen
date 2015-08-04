@@ -1,14 +1,15 @@
 class Sequel::Model
     # PARAMS (Integer, Symbol)
-    def validates_greater_than(value, column)
-        column = send(column)
+    def validates_greater_than(value, column_name)
+        column_value = send(column_name)
 
-        if column.is_a? Integer
-            if column <= value
-                errors.add(column, "must be greater than #{value}")
+        if column_value.is_a? Integer
+            if column_value <= value
+                errors.add(column_name, "must be greater than #{value}")
             end
         else
-            errors.add(column, "must be of type Integer to be validated")
+            # column_name should refer to a column of type Integer
+            raise Sequel::Error::InvalidOperation
         end
     end
 end

@@ -43,15 +43,15 @@ describe Sequel::Model do
         end
 
         describe "a column which isn't of type Integer" do
-            it "must not be valid" do
+            it "must raise a Sequel::Error::InvalidOperation exception" do
                 @c.set_validations { validates_greater_than(5, :value) }
-                @m.wont_be :valid?
+                proc { @m.valid? }.must_raise Sequel::Error::InvalidOperation
 
                 @m.value = "123"
-                @m.wont_be :valid?
+                proc { @m.valid? }.must_raise Sequel::Error::InvalidOperation
 
                 @m.value = true
-                @m.wont_be :valid?
+                proc { @m.valid? }.must_raise Sequel::Error::InvalidOperation
             end
         end
     end

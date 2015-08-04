@@ -1,5 +1,6 @@
-# encoding: utf-8
 class Name < Sequel::Model
+    self.raise_on_save_failure = false
+
     def validates_neighborhood
         unless (neighborhood || "").empty?
             valid_neighborhoods = %w{friedrichshain-kreuzberg
