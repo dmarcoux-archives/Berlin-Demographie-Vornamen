@@ -1,3 +1,4 @@
+# TODO Authentication
 class BDV_App < Sinatra::Application
     helpers RoutesUtils
 
@@ -5,11 +6,21 @@ class BDV_App < Sinatra::Application
         content_type :json
     end
 
-    # TODO Authentication
+    before "/names/:id" do |id|
+        id = id.to_i
+
+        if id <= 0
+            return [400, { message: "Invalid id parameter", description: "A valid Integer greater than 0 must be provided" }.to_json]
+        end
+
+        unless @name = Name.find(id: id)
+            return [404, { message: "Not found", description: "Name ##{id} doesn't exist" }.to_json]
+        end
+    end
 
     # Retrieve a list of names
     get "/names" do
-        sanitize_default_params(params)
+        sanitize_default_params(Name, params)
 
         name = params[:name]
         count = params[:count]
@@ -27,24 +38,13 @@ class BDV_App < Sinatra::Application
     end
 
     # Retrieve a specific name
-    get "/names/:id" do |id|
-        # DRY code (in a before)
-        id = id.to_i
-
-        if id <= 0
-            [400, { message: "Invalid id parameter", description: "A valid Integer greater than 0 must be provided" }.to_json]
-        end
-
-        unless name = Name.find(id: id)
-            [404, { message: "Not found", description: "Name ##{id} doesn't exist" }.to_json]
-        end
-
-        [200, name.to_json]
+    get "/names/:id" do
+        [200, @name.to_json]
     end
 
     # Create a new name
     post "/names" do
-        sanitize_default_params(params)
+        sanitize_default_params(Name, params)
 
         name = Name.new(params)
         if name.save
@@ -57,26 +57,17 @@ class BDV_App < Sinatra::Application
 
     # Update a specific name
     put "/names/:id" do |id|
-        id = id.to_i
+        sanitize_params(Name, params)
 
-        if id <= 0
-            [400, { message: "Invalid id parameter", description: "A valid Integer greater than 0 must be provided" }.to_json]
-        end
-
-        unless name = Name.find(id: id)
-            [404, { message: "Not found", description: "Name ##{id} doesn't exist" }.to_json]
-        end
-
-        sanitize_params(params)
         if params.empty?
-            [400, { message: "Parameters needed", description: "Provide valid parameters to update Name ##{id}" }.to_json]
+            return [400, { message: "Parameters needed", description: "Provide valid parameters to update Name ##{id}" }.to_json]
         end
 
-        unless name.update(params)
-            [422, name.errors.to_json]
+        unless @name.update(params)
+            return [422, @name.errors.to_json]
         end
 
-        [200, name.to_json]
+        [200, @name.to_json]
     end
 
     # Delete a specific name

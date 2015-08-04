@@ -1,5 +1,17 @@
 class Name < Sequel::Model
     self.raise_on_save_failure = false
+    self.set_allowed_columns(:name, :count, :gender, :neighborhood)
+
+    # Used when sanitizing user input
+    @@columns_sanitization = {
+                                name: :to_s,
+                                count: :to_i,
+                                gender: :to_s,
+                                neighborhood: :to_s
+                             }
+    def self.columns_sanitization
+        @@columns_sanitization
+    end
 
     def validates_neighborhood
         unless (neighborhood || "").empty?

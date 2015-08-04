@@ -1,23 +1,23 @@
-# TODO Improve this file... ugly hardcoded stuff...
+# TODO specs
 module RoutesUtils
-    # Prepare all parameters by getting rid of nil and converting non-String columns to their proper type
-    def sanitize_default_params(params)
-        # Cannot use symbols here because the hash params has string keys
-        params.merge!({
-                        "name" => params[:name].to_s,
-                        "count" => params[:count].to_i,
-                        "gender" => params[:gender].to_s,
-                        "neighborhood" => params[:neighborhood].to_s
-                      })
-    end
+    # Sanitize all params or only present ones for the model, depending on the default argument
+    # With default == true -> All params
+    # With default == false -> Only present params
+    def sanitize_params(model, params, default = false)
+        columns = model.columns_sanitization
 
-    # Convert non-String columns to their proper type, but only if they are present in params
-    def sanitize_params(params)
-        if params[:count]
-            # Cannot use symbols here because the hash params has string keys
-            params.merge!({ "count" => params[:count].to_i })
+        h = {}
+        columns.each do |column, sanitize_method|
+            if (p = params[column]) || default
+                # Using string keys to use the same key type as in the hash params
+                h[column.to_s] = p.send(sanitize_method)
+            end
         end
 
-        params.select! { |k, v| ["name", "count", "gender", "neighborhood"].include?(k) }
+        params.merge!(h).select! { |k, v| model.allowed_columns.include?(k.to_sym) }
+    end
+
+    def sanitize_default_params(model, params)
+        sanitize_params(model, params, true)
     end
 end
