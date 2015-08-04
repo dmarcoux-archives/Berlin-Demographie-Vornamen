@@ -10,11 +10,11 @@ class BDV_App < Sinatra::Application
         id = id.to_i
 
         if id <= 0
-            return [400, { message: "Invalid id parameter", description: "A valid Integer greater than 0 must be provided" }.to_json]
+            halt [400, { message: "Invalid id parameter", description: "A valid Integer greater than 0 must be provided" }.to_json]
         end
 
         unless @name = Name.find(id: id)
-            return [404, { message: "Not found", description: "Name ##{id} doesn't exist" }.to_json]
+            halt [404, { message: "Not found", description: "Name ##{id} doesn't exist" }.to_json]
         end
     end
 
