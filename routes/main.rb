@@ -20,12 +20,12 @@ class BDV_App < Sinatra::Application
 
     # Retrieve a list of names
     get "/names" do
-        sanitize_default_params(Name, params)
+        s_params = sanitize_default_params(Name, params)
 
-        name = params[:name]
-        count = params[:count]
-        gender = params[:gender]
-        neighborhood = params[:neighborhood]
+        name = s_params[:name]
+        count = s_params[:count]
+        gender = s_params[:gender]
+        neighborhood = s_params[:neighborhood]
 
         names = DB[:names]
         names = names.filter(name: name) unless name.empty?
@@ -44,9 +44,9 @@ class BDV_App < Sinatra::Application
 
     # Create a new name
     post "/names" do
-        sanitize_default_params(Name, params)
+        s_params = sanitize_default_params(Name, params)
 
-        name = Name.new(params)
+        name = Name.new(s_params)
         if name.save
             # TODO location header for the newly created name...
             [200, name.to_json]
@@ -57,13 +57,13 @@ class BDV_App < Sinatra::Application
 
     # Update a specific name
     put "/names/:id" do |id|
-        sanitize_params(Name, params)
+        s_params = sanitize_params(Name, params)
 
-        if params.empty?
+        if s_params.empty?
             return [400, { message: "Parameters needed", description: "Provide valid parameters to update Name ##{id}" }.to_json]
         end
 
-        unless @name.update(params)
+        unless @name.update(s_params)
             return [422, @name.errors.to_json]
         end
 
