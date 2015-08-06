@@ -9,11 +9,15 @@ class BDV_App < Sinatra::Application
         id = id.to_i
 
         if id <= 0
-            halt [400, { message: "Invalid id parameter", description: "A valid Integer greater than 0 must be provided" }.to_json]
+            status 400
+            @body = { message: "Invalid id parameter", description: "A valid Integer greater than 0 must be provided" }
+            halt
         end
 
         unless @name = Name.find(id: id)
-            halt [404, { message: "Not found", description: "Name ##{id} doesn't exist" }.to_json]
+            status 404
+            @body = { message: "Not found", description: "Name ##{id} doesn't exist" }
+            halt
         end
     end
 
@@ -36,12 +40,14 @@ class BDV_App < Sinatra::Application
         names = names.filter(neighborhood: neighborhood) unless neighborhood.empty?
 
         # TODO sorting, aliases for common queries (neighborhood, male/female, etc...)
-        [200, names.limit(limit).offset(offset).all.to_json]
+        status 200
+        @body = names.limit(limit).offset(offset).all
     end
 
     # Retrieve a specific name
     get "/names/:id" do
-        [200, @name.to_json]
+        status 200
+        @body = @name
     end
 
     # Create a new name
@@ -50,9 +56,12 @@ class BDV_App < Sinatra::Application
 
         name = Name.new(s_params)
         if name.save
-            [200,{ "location" => "#{request.base_url}#{request.path_info}/#{name.id}" }, name.to_json]
+            status 200
+            headers ({ "location" => "#{request.base_url}#{request.path_info}/#{name.id}" })
+            @body = name
         else
-            [422, name.errors.to_json]
+            status 422
+            @body = name.errors
         end
     end
 
@@ -61,22 +70,41 @@ class BDV_App < Sinatra::Application
         s_params = sanitize_params(Name, params)
 
         if s_params.empty?
-            return [400, { message: "Parameters needed", description: "Provide valid parameters to update Name ##{id}" }.to_json]
+            status 400
+            @body = { message: "Parameters needed", description: "Provide valid parameters to update Name ##{id}" }
+            return
         end
 
         unless @name.update(s_params)
-            return [422, @name.errors.to_json]
+            status 422
+            @body = @name.errors
+            return
         end
 
-        [200, @name.to_json]
+        status 200
+        @body = @name
     end
 
     # Delete a specific name
     delete "/names/:id" do |id|
         unless @name.destroy
-            return [500, { message: "Name deletion error", description: "Name ##{id} couldn't be deleted" }.to_json]
+            status 500
+            @body = { message: "Name deletion error", description: "Name ##{id} couldn't be deleted" }
+            return
         end
 
-        [200, { message: "Name deleted", description: "Name ##{id} deleted successfully" }.to_json]
+        status 200
+        @body = { message: "Name deleted", description: "Name ##{id} deleted successfully" }
+    end
+
+    # Formatting the response JSON body
+    after do
+        pretty_print = !!params[:pretty]
+
+        response.body = if pretty_print
+                            JSON.pretty_generate(@body)
+                        else
+                            @body.to_json
+                        end
     end
 end
