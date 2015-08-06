@@ -35,6 +35,7 @@ class BDV_App < Sinatra::Application
         names = names.filter(gender: gender) unless gender.empty?
         names = names.filter(neighborhood: neighborhood) unless neighborhood.empty?
 
+        # TODO sorting, aliases for common queries (neighborhood, male/female, etc...)
         [200, names.limit(limit).offset(offset).all.to_json]
     end
 

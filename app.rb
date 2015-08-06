@@ -1,3 +1,4 @@
+# TODO SSL, pretty print
 require "sinatra"
 
 set :root, File.dirname(__FILE__)
@@ -8,6 +9,8 @@ class BDV_App < Sinatra::Application
     use Rack::Auth::Basic, "Restricted Area" do |username, password|
         [username, password] == ["bdv", "admin"]
     end
+
+    use Rack::Deflater
 end
 
 require_relative "models/init"
