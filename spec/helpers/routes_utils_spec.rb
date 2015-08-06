@@ -63,10 +63,47 @@ describe RoutesUtils do
     end
 
     describe "#sanitize_limit_param" do
+        describe "when receiving nil or a String which converted to Integer equals 0" do
+            it "returns 100" do
+                @module.sanitize_limit_param(nil).must_equal 100
+                @module.sanitize_limit_param("Foo").must_equal 100
+            end
+        end
 
+        describe "when receiving a String which converted to Integer is between 1 and 100" do
+            it "returns the newly converted Integer" do
+                1.upto(100) do |n|
+                    @module.sanitize_limit_param(n.to_s).must_equal n
+                end
+            end
+        end
+
+        describe "when receiving a String which converted to Integer is greater than 100" do
+            it "returns 100" do
+                @module.sanitize_limit_param("101").must_equal 100
+            end
+        end
     end
 
     describe "#sanitize_offset_param" do
+        describe "when receiving nil or a String which converted to Integer equals 0" do
+            it "returns 0" do
+                @module.sanitize_offset_param(nil).must_equal 0
+                @module.sanitize_offset_param("Foo").must_equal 0
+            end
+        end
 
+        describe "when receiving a String which converted to Integer is smaller than 0" do
+            it "returns 0" do
+                @module.sanitize_offset_param("-1").must_equal 0
+            end
+        end
+
+        describe "when receiving a String which converted to Integer is greater than 0" do
+            it "returns the newly converted Integer" do
+                @module.sanitize_offset_param("1").must_equal 1
+                @module.sanitize_offset_param("1000").must_equal 1000
+            end
+        end
     end
 end
