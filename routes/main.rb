@@ -49,8 +49,7 @@ class BDV_App < Sinatra::Application
 
         name = Name.new(s_params)
         if name.save
-            # TODO location header for the newly created name...
-            [200, name.to_json]
+            [200,{ "location" => "#{request.base_url}#{request.path_info}/#{name.id}" }, name.to_json]
         else
             [422, name.errors.to_json]
         end
