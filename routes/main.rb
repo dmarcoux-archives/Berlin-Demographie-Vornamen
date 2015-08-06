@@ -1,4 +1,3 @@
-# TODO Authentication
 class BDV_App < Sinatra::Application
     helpers RoutesUtils
 
@@ -27,14 +26,16 @@ class BDV_App < Sinatra::Application
         gender = s_params[:gender]
         neighborhood = s_params[:neighborhood]
 
+        limit = sanitize_limit_param(params[:limit])
+        offset = sanitize_offset_param(params[:offset])
+
         names = DB[:names]
         names = names.filter(name: name) unless name.empty?
         names = names.filter(count: count) unless count <= 0
         names = names.filter(gender: gender) unless gender.empty?
         names = names.filter(neighborhood: neighborhood) unless neighborhood.empty?
 
-        # TODO implement pagination
-        [200, names.limit(100).all.to_json]
+        [200, names.limit(limit).offset(offset).all.to_json]
     end
 
     # Retrieve a specific name

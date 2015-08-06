@@ -61,4 +61,12 @@ describe RoutesUtils do
             end
         end
     end
+
+    describe "#sanitize_limit_param" do
+
+    end
+
+    describe "#sanitize_offset_param" do
+
+    end
 end

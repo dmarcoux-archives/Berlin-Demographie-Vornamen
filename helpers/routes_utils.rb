@@ -25,4 +25,20 @@ module RoutesUtils
     def sanitize_default_params(model, params)
         sanitize_params(model, params, true)
     end
+
+    def sanitize_limit_param(l)
+        limit = l.to_i
+
+        return limit if (limit > 0 && limit <= 100)
+
+        100
+    end
+
+    def sanitize_offset_param(o)
+        offset = o.to_i
+
+        return offset if offset >= 0
+
+        0
+    end
 end

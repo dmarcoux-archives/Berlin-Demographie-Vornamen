@@ -4,6 +4,10 @@ set :root, File.dirname(__FILE__)
 
 # Initialize the Sinatra app
 class BDV_App < Sinatra::Application
+    # Basic authentication for all routes
+    use Rack::Auth::Basic, "Restricted Area" do |username, password|
+        [username, password] == ["bdv", "admin"]
+    end
 end
 
 require_relative "models/init"
