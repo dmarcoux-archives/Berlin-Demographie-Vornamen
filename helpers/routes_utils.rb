@@ -4,7 +4,6 @@ module RoutesUtils
         unless model.respond_to?(:columns_sanitization)
             raise NoMethodError.new("undefined method or class variable 'columns_sanitization' for model '#{model.name}'",
                                     "RoutesUtils.sanitize_params")
-            # columns_sanitization example: { col1: :to_s, col2: :to_i, col3: :to_f }
         end
 
         columns = model.columns_sanitization
@@ -40,5 +39,15 @@ module RoutesUtils
         return offset if offset >= 0
 
         0
+    end
+
+    # TODO tests
+    # Link path parameters to a model's common filters
+    def path_params(model, path_info)
+        # Keeping only the path parameters from request's path info
+        params = path_info[1..-1].split("/")[1..-1].map(&:to_sym)
+        return {} if params.empty?
+
+        model.common_filters.select { |k, v| params.include?(k)}.values
     end
 end

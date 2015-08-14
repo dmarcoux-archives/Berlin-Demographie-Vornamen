@@ -5,10 +5,10 @@ class BDV_App < Sinatra::Application
         content_type :json
     end
 
-    before "/names/:id" do |id|
+    before %r{^/names/([0-9]+)$} do |id|
         id = id.to_i
 
-        if id <= 0
+        if id == 0
             status 400
             @body = { message: "Invalid id parameter", description: "A valid Integer greater than 0 must be provided" }
             halt
@@ -22,7 +22,7 @@ class BDV_App < Sinatra::Application
     end
 
     # Retrieve a list of names
-    get "/names" do
+    get /^\/names(\/[a-z\-]+)*$/ do
         s_params = sanitize_default_params(Name, params)
 
         name = s_params[:name]
@@ -33,19 +33,22 @@ class BDV_App < Sinatra::Application
         limit = sanitize_limit_param(params[:limit])
         offset = sanitize_offset_param(params[:offset])
 
+        # In addition to query string parameters, path parameters can also be used to filter records; e.g. /names/male/mitte instead of /names?gender=m&neighborhood=mitte
+        p_params = path_params(Name, request.path_info)
+
         names = DB[:names]
         names = names.filter(name: name) unless name.empty?
         names = names.filter(count: count) unless count <= 0
         names = names.filter(gender: gender) unless gender.empty?
         names = names.filter(neighborhood: neighborhood) unless neighborhood.empty?
+        names = names.filter(p_params) unless p_params.empty?
 
-        # TODO sorting, aliases for common queries (neighborhood, male/female, etc...)
         status 200
         @body = names.limit(limit).offset(offset).all
     end
 
     # Retrieve a specific name
-    get "/names/:id" do
+    get /^\/names\/[0-9]+$/ do
         status 200
         @body = @name
     end
@@ -66,7 +69,7 @@ class BDV_App < Sinatra::Application
     end
 
     # Update a specific name
-    put "/names/:id" do |id|
+    put %r{^/names/([0-9]+)$} do |id|
         s_params = sanitize_params(Name, params)
 
         if s_params.empty?
@@ -86,7 +89,7 @@ class BDV_App < Sinatra::Application
     end
 
     # Delete a specific name
-    delete "/names/:id" do |id|
+    delete %r{^/names/([0-9]+)$} do |id|
         unless @name.destroy
             status 500
             @body = { message: "Name deletion error", description: "Name ##{id} couldn't be deleted" }
@@ -99,6 +102,8 @@ class BDV_App < Sinatra::Application
 
     # Formatting the response JSON body
     after do
+        @body ||= { message: "Not found", descrition: "The requested route was not found" }
+
         pretty_print = !!params[:pretty]
 
         response.body = if pretty_print

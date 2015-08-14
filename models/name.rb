@@ -2,6 +2,20 @@ class Name < Sequel::Model
     self.raise_on_save_failure = false
     self.set_allowed_columns(:name, :count, :gender, :neighborhood)
 
+    @@valid_neighborhoods = %w{friedrichshain-kreuzberg
+                               standesamt_i
+                               lichtenberg
+                               mitte
+                               reinickendorf
+                               tempelhof-schoeneberg
+                               marzahn-hellersdorf
+                               pankow
+                               spandau
+                               charlottenburg-wilmersdorf
+                               treptow-koepenick
+                               neukoelln
+                               steglitz-zehlendorf}
+
     # Used when sanitizing user input
     @@columns_sanitization = {
                                 name: :to_s,
@@ -13,24 +27,21 @@ class Name < Sequel::Model
         @@columns_sanitization
     end
 
+    # Used to have aliases linked to certain columns' common values for this model. It can be used to have more verbose REST routes for example
+    @@common_filters = {
+                        male: { gender: "m" },
+                        female: { gender: "w" }
+                       }
+    @@valid_neighborhoods.each { |n| @@common_filters[n.to_sym] = { neighborhood: n } }
+
+    def self.common_filters
+        @@common_filters
+    end
+
     def validates_neighborhood
         unless (neighborhood || "").empty?
-            valid_neighborhoods = %w{friedrichshain-kreuzberg
-                                     standesamt_i
-                                     lichtenberg
-                                     mitte
-                                     reinickendorf
-                                     tempelhof-schoeneberg
-                                     marzahn-hellersdorf
-                                     pankow
-                                     spandau
-                                     charlottenburg-wilmersdorf
-                                     treptow-koepenick
-                                     neukoelln
-                                     steglitz-zehlendorf}
-
-            unless valid_neighborhoods.include?(neighborhood)
-                errors.add(:neighborhood, "must be a valid neighborhood in the following list: #{valid_neighborhoods.join(", ")}")
+            unless @@valid_neighborhoods.include?(neighborhood)
+                errors.add(:neighborhood, "must be a valid neighborhood in the following list: #{@@valid_neighborhoods.join(", ")}")
             end
         end
     end

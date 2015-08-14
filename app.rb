@@ -1,4 +1,4 @@
-# TODO SSL, pretty print
+# TODO SSL
 require "sinatra"
 
 set :root, File.dirname(__FILE__)
