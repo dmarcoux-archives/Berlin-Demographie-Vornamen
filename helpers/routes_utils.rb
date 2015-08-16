@@ -41,12 +41,18 @@ module RoutesUtils
         0
     end
 
-    # TODO tests
     # Link path parameters to a model's common filters
     def path_params(model, path_info)
+        unless model.respond_to?(:common_filters)
+            raise NoMethodError.new("undefined method or class variable 'common_filters' for model '#{model.name}'",
+                                    "RoutesUtils.path_params")
+        end
+
+        return [] if path_info.empty?
+
         # Keeping only the path parameters from request's path info
         params = path_info[1..-1].split("/")[1..-1].map(&:to_sym)
-        return {} if params.empty?
+        return [] if params.empty?
 
         model.common_filters.select { |k, v| params.include?(k)}.values
     end
