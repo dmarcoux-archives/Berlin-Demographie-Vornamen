@@ -56,4 +56,20 @@ module RoutesUtils
 
         model.common_filters.select { |k, v| params.include?(k)}.values
     end
+
+    # Prepare sort params so they can be used with Sequel
+    def sort_params(model, params)
+        # Keep only sortable columns
+        p = params.to_s.split(",").select { |v| (model.allowed_columns || []).include?(v.sub(/^-/, "").to_sym) }
+
+        p.map do |v|
+            if v[0] == "-"
+                # Descending sort
+                Sequel.desc(v[1..-1].to_sym)
+            else
+                # Ascending sort
+                Sequel.asc(v.to_sym)
+            end
+        end
+    end
 end

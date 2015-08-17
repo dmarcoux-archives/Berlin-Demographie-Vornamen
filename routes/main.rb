@@ -23,28 +23,41 @@ class BDV_App < Sinatra::Application
 
     # Retrieve a list of names
     get /^\/names(\/[a-z\-]+)*$/ do
-        s_params = sanitize_default_params(Name, params)
-
-        name = s_params[:name]
-        count = s_params[:count]
-        gender = s_params[:gender]
-        neighborhood = s_params[:neighborhood]
-
-        limit = sanitize_limit_param(params[:limit])
-        offset = sanitize_offset_param(params[:offset])
-
-        # In addition to query string parameters, path parameters can also be used to filter records; e.g. /names/male/mitte instead of /names?gender=m&neighborhood=mitte
-        p_params = path_params(Name, request.path_info)
-
         names = DB[:names]
+
+        # Query string parameters
+        p = sanitize_default_params(Name, params)
+
+        name = p[:name]
+        count = p[:count]
+        gender = p[:gender]
+        neighborhood = p[:neighborhood]
+
         names = names.filter(name: name) unless name.empty?
         names = names.filter(count: count) unless count <= 0
         names = names.filter(gender: gender) unless gender.empty?
         names = names.filter(neighborhood: neighborhood) unless neighborhood.empty?
+
+        # In addition to query string parameters, path parameters can also be used to filter records; e.g. /names/male/mitte instead of /names?gender=m&neighborhood=mitte
+        p_params = path_params(Name, request.path_info)
         names = names.filter(p_params) unless p_params.empty?
 
+        # Sort parameters must be processed one at a time since Sequel + PostgreSQL cannot resolve properly the ORDER clause with an array
+        s_params = sort_params(Name, params[:sort])
+        s_params.each { |s_param| names = names.order_more(s_param) }
+
+        # Pagination parameters
+        limit = sanitize_limit_param(params[:limit])
+        offset = sanitize_offset_param(params[:offset])
+
+        # Metadata
+        names_count = names.count
+
         status 200
-        @body = names.limit(limit).offset(offset).all
+        @body = {
+                    items: names.limit(limit).offset(offset).all,
+                    count: names_count
+                }
     end
 
     # Retrieve a specific name

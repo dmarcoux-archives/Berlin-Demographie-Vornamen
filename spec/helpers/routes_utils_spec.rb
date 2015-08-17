@@ -155,4 +155,40 @@ describe RoutesUtils do
             end
         end
     end
+
+    describe "#sort_params" do
+        describe "a model with allowed columns" do
+            before do
+                @model.set_allowed_columns(:col1, :col2)
+            end
+
+            describe "when passing params being nil" do
+                it "returns an empty array" do
+                    @module.sort_params(@model, nil).must_equal []
+                end
+            end
+
+            describe "when passing in params a String containing columns which aren't allowed" do
+                it "returns an empty array" do
+                    @module.sort_params(@model, "col000,-col999").must_equal []
+                end
+            end
+
+            describe "when passing in params a String containing columns which some or all are allowed" do
+                it "must returns an array containing the allowed columns as Sequel.asc(:col_name) or Sequel.desc(:col_name) if the column name is prepend by '-'" do
+                    @module.sort_params(@model, "-col1,col2,col999").must_equal [Sequel.desc(:col1), Sequel.asc(:col2)]
+                    @module.sort_params(@model, "col1,-col2").must_equal [Sequel.asc(:col1), Sequel.desc(:col2)]
+                end
+            end
+        end
+
+        describe "a model with no allowed columns" do
+            describe "when passing anything in params" do
+                it "returns an empty array" do
+                    @module.sort_params(@model, "").must_equal []
+                    @module.sort_params(@model, "sort=col1,col2").must_equal []
+                end
+            end
+        end
+    end
 end
