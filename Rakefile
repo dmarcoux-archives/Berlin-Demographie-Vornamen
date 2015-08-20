@@ -1,11 +1,13 @@
 require "rake"
 require "rake/testtask"
 
-require "dotenv"
-# Override existing values in ENV, then load .env and if possible, .env.<environment> files.
-# Overriding existing values is necessary in tasks
-Dotenv.overload(Dir.pwd << "/.env",
-                Dir.pwd << "/.env.#{ENV["RACK_ENV"]}")
+unless ENV["RACK_ENV"] == "production"
+    require "dotenv"
+    # Override existing values in ENV, then load .env and if possible, .env.<environment> files.
+    # Overriding existing values is necessary in tasks
+    Dotenv.overload(Dir.pwd << "/.env",
+                    Dir.pwd << "/.env.#{ENV["RACK_ENV"]}")
+end
 
 # Prevent errors...
 # Idea from http://technotes.iangreenleaf.com/posts/confirmation-for-destructive-rake-tasks.html
