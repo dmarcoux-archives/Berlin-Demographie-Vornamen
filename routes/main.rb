@@ -1,10 +1,6 @@
 class BDV_App < Sinatra::Application
     helpers RoutesUtils
 
-    before do
-        content_type :json
-    end
-
     before %r{^/names/([0-9]+)$} do |id|
         id = id.to_i
 
@@ -111,18 +107,5 @@ class BDV_App < Sinatra::Application
 
         status 200
         @body = { message: "Name deleted", description: "Name ##{id} deleted successfully" }
-    end
-
-    # Formatting the response JSON body
-    after do
-        @body ||= { message: "Not found", descrition: "The requested route was not found" }
-
-        pretty_print = !!params[:pretty]
-
-        response.body = if pretty_print
-                            JSON.pretty_generate(@body)
-                        else
-                            @body.to_json
-                        end
     end
 end
