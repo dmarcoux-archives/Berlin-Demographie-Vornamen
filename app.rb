@@ -1,5 +1,8 @@
 # TODO SSL
-require "sinatra"
+configure do
+    # Enable Cross Origin Resource Sharing (CORS)
+    enable :cross_origin
+end
 
 set :root, File.dirname(__FILE__)
 

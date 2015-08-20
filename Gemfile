@@ -3,6 +3,7 @@ source 'https://rubygems.org'
 gem "rake"
 
 gem "sinatra"
+gem "sinatra-cross_origin"
 
 gem "pg"
 gem "sequel"
