@@ -18,7 +18,7 @@ class BDV_App < Sinatra::Application
     end
 
     # Retrieve a list of names
-    get /^\/names(\/[a-z\-]+)*$/ do
+    get /^\/names(\/[a-z\-\_]+)*$/ do
         names = DB[:names]
 
         # Query string parameters
