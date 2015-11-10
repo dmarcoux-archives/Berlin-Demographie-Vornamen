@@ -8,7 +8,7 @@ set :root, File.dirname(__FILE__)
 
 # Initialize the Sinatra app
 class BDV_App < Sinatra::Application
-  use Rack::Session::Pool, expire_after: 2592000 # 30 days in seconds
+  use Rack::Session::Pool, expire_after: 2_592_000 # 30 days in seconds
   use Rack::Deflater
 
   # Basic authentication
