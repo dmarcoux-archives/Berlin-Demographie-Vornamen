@@ -1,21 +1,23 @@
 source 'https://rubygems.org'
 
-gem "rake"
+gem 'rake'
 
-gem "sinatra"
-gem "sinatra-cross_origin"
+gem 'sinatra'
+gem 'sinatra-cross_origin'
 
-gem "pg"
-gem "sequel"
+gem 'pg'
+gem 'sequel'
 
-gem "json"
+gem 'json'
 
 group :development, :test do
-    gem "pry"
-    gem "pry-nav"
+  gem 'rubocop', require: false
 
-    gem "dotenv"
+  gem 'pry'
+  gem 'pry-nav'
 
-    gem "minitest"
-    gem "rack-test"
+  gem 'dotenv'
+
+  gem 'minitest'
+  gem 'rack-test'
 end
