@@ -28,7 +28,7 @@ module RoutesUtils
   def sanitize_limit_param(l)
     limit = l.to_i
 
-    return limit if (limit > 0 && limit <= 100)
+    return limit if limit > 0 && limit <= 100
 
     100
   end

@@ -15,7 +15,7 @@ class BDV_App < Sinatra::Application
   before do
     content_type :json
 
-    unless (session[:authorized] ||= (params[:key] == 'bdv'))
+    unless session[:authorized] ||= (params[:key] == 'bdv')
       status 401
       @body = { message: 'Unauthorized access', description: 'Please login by providing the valid key' }
       halt
