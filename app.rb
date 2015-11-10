@@ -26,12 +26,10 @@ class BDV_App < Sinatra::Application
   after do
     @body ||= { message: 'Not found', descrition: 'The requested route was not found' }
 
-    pretty_print = !!params[:pretty]
-
-    response.body = if pretty_print
-                      JSON.pretty_generate(@body)
-                    else
+    response.body = if params[:pretty].nil?
                       @body.to_json
+                    else
+                      JSON.pretty_generate(@body)
                     end
   end
 end
