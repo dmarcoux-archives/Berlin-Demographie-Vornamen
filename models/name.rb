@@ -29,8 +29,8 @@ class Name < Sequel::Model
 
     # Used to have aliases linked to certain columns' common values for this model. It can be used to have more verbose REST routes for example
     @@common_filters = {
-                        male: { gender: "m" },
-                        female: { gender: "w" }
+                        male: { gender: 'm' },
+                        female: { gender: 'w' }
                        }
     @@valid_neighborhoods.each { |n| @@common_filters[n.to_sym] = { neighborhood: n } }
 
@@ -39,9 +39,9 @@ class Name < Sequel::Model
     end
 
     def validates_neighborhood
-        unless (neighborhood || "").empty?
+        unless (neighborhood || '').empty?
             unless @@valid_neighborhoods.include?(neighborhood)
-                errors.add(:neighborhood, "must be a valid neighborhood in the following list: #{@@valid_neighborhoods.join(", ")}")
+                errors.add(:neighborhood, "must be a valid neighborhood in the following list: #{@@valid_neighborhoods.join(', ')}")
             end
         end
     end

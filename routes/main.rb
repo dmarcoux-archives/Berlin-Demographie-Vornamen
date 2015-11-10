@@ -6,13 +6,13 @@ class BDV_App < Sinatra::Application
 
         if id == 0
             status 400
-            @body = { message: "Invalid id parameter", description: "A valid Integer greater than 0 must be provided" }
+            @body = { message: 'Invalid id parameter', description: 'A valid Integer greater than 0 must be provided' }
             halt
         end
 
         unless @name = Name.find(id: id)
             status 404
-            @body = { message: "Not found", description: "Name ##{id} doesn't exist" }
+            @body = { message: 'Not found', description: "Name ##{id} doesn't exist" }
             halt
         end
     end
@@ -63,13 +63,13 @@ class BDV_App < Sinatra::Application
     end
 
     # Create a new name
-    post "/names" do
+    post '/names' do
         s_params = sanitize_default_params(Name, params)
 
         name = Name.new(s_params)
         if name.save
             status 200
-            headers ({ "location" => "#{request.base_url}#{request.path_info}/#{name.id}" })
+            headers ({ 'location' => "#{request.base_url}#{request.path_info}/#{name.id}" })
             @body = name
         else
             status 422
@@ -83,7 +83,7 @@ class BDV_App < Sinatra::Application
 
         if s_params.empty?
             status 400
-            @body = { message: "Parameters needed", description: "Provide valid parameters to update Name ##{id}" }
+            @body = { message: 'Parameters needed', description: "Provide valid parameters to update Name ##{id}" }
             return
         end
 
@@ -101,11 +101,11 @@ class BDV_App < Sinatra::Application
     delete %r{^/names/([0-9]+)$} do |id|
         unless @name.destroy
             status 500
-            @body = { message: "Name deletion error", description: "Name ##{id} couldn't be deleted" }
+            @body = { message: 'Name deletion error', description: "Name ##{id} couldn't be deleted" }
             return
         end
 
         status 200
-        @body = { message: "Name deleted", description: "Name ##{id} deleted successfully" }
+        @body = { message: 'Name deleted', description: "Name ##{id} deleted successfully" }
     end
 end
