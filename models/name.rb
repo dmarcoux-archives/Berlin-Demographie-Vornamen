@@ -39,11 +39,9 @@ class Name < Sequel::Model
   end
 
   def validates_neighborhood
-    unless (neighborhood || '').empty?
-      unless @@valid_neighborhoods.include?(neighborhood)
-        errors.add(:neighborhood, "must be a valid neighborhood in the following list: #{@@valid_neighborhoods.join(', ')}")
-      end
-    end
+    return if neighborhood.to_s.empty? || @@valid_neighborhoods.include?(neighborhood)
+
+    errors.add(:neighborhood, "must be a valid neighborhood in the following list: #{@@valid_neighborhoods.join(', ')}")
   end
 
   def validate
