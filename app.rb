@@ -1,39 +1,39 @@
 # TODO: SSL
 configure do
-    # Enable Cross Origin Resource Sharing (CORS)
-    enable :cross_origin
+  # Enable Cross Origin Resource Sharing (CORS)
+  enable :cross_origin
 end
 
 set :root, File.dirname(__FILE__)
 
 # Initialize the Sinatra app
 class BDV_App < Sinatra::Application
-    use Rack::Session::Pool, expire_after: 2592000 # 30 days in seconds
-    use Rack::Deflater
+  use Rack::Session::Pool, expire_after: 2592000 # 30 days in seconds
+  use Rack::Deflater
 
-    # Basic authentication
-    before do
-        content_type :json
+  # Basic authentication
+  before do
+    content_type :json
 
-        unless (session[:authorized] ||= (params[:key] == 'bdv'))
-            status 401
-            @body = { message: 'Unauthorized access', description: 'Please login by providing the valid key' }
-            halt
-        end
+    unless (session[:authorized] ||= (params[:key] == 'bdv'))
+      status 401
+      @body = { message: 'Unauthorized access', description: 'Please login by providing the valid key' }
+      halt
     end
+  end
 
-    # Formatting the response JSON body
-    after do
-        @body ||= { message: 'Not found', descrition: 'The requested route was not found' }
+  # Formatting the response JSON body
+  after do
+    @body ||= { message: 'Not found', descrition: 'The requested route was not found' }
 
-        pretty_print = !!params[:pretty]
+    pretty_print = !!params[:pretty]
 
-        response.body = if pretty_print
-                            JSON.pretty_generate(@body)
-                        else
-                            @body.to_json
-                        end
-    end
+    response.body = if pretty_print
+                      JSON.pretty_generate(@body)
+                    else
+                      @body.to_json
+                    end
+  end
 end
 
 require_relative 'models/init'

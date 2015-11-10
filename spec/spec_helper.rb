@@ -13,5 +13,5 @@ require_relative '../app.rb'
 include Rack::Test::Methods
 
 def app
-    BDV_App
+  BDV_App
 end

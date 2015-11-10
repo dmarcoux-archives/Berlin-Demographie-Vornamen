@@ -15,20 +15,20 @@ Dir.chdir('db/seeds/')
 data_files = Dir.glob('*.csv').map { |filename| CSV.open(filename, mode = 'r') }
 
 data_files.each do |data_file|
-    # The name of the neighborhood is the name of the file. Berlin Open Data seems to use this standard
-    neighborhood = data_file.path.gsub('.csv', '')
+  # The name of the neighborhood is the name of the file. Berlin Open Data seems to use this standard
+  neighborhood = data_file.path.gsub('.csv', '')
 
-    # Retrieve all the names listed in the file and skips the header
-    names = data_file.readlines()[1..-1]
+  # Retrieve all the names listed in the file and skips the header
+  names = data_file.readlines()[1..-1]
 
-    # Insert the names in the database
-    names.each_with_index do |name, index|
-        fields = name[0].split(';')
+  # Insert the names in the database
+  names.each_with_index do |name, index|
+    fields = name[0].split(';')
 
-        # The model doesn't have to be validated, the data will be validated by the database anyway
-        Name.new(name: fields[0], count: fields[1], gender: fields[2], neighborhood: neighborhood).save(validate: false)
-    end
+    # The model doesn't have to be validated, the data will be validated by the database anyway
+    Name.new(name: fields[0], count: fields[1], gender: fields[2], neighborhood: neighborhood).save(validate: false)
+  end
 
-    # Providing some feedback to the user
-    puts "#{neighborhood.capitalize}: #{names.length} names inserted"
+  # Providing some feedback to the user
+  puts "#{neighborhood.capitalize}: #{names.length} names inserted"
 end
