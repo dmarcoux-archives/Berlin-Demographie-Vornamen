@@ -9,6 +9,7 @@ Learning Sinatra by building an API with PostgreSQL, Sequel, Dotenv and Minitest
 2. Setup CodeClimate
 3. Setup Guard
 4. Improve README.md with examples on how to run specs, run the server, etc...
+5. Setup Mutant
 
 #Introduction
 
@@ -25,3 +26,10 @@ I took the data on this website http://daten.berlin.de/kategorie/demographie, mo
 ##Specs
 
 
+##Rubocop
+
+
+##Guard
+
+
+##Mutant
