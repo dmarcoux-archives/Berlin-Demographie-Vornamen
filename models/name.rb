@@ -1,6 +1,6 @@
 class Name < Sequel::Model
   self.raise_on_save_failure = false
-  self.set_allowed_columns(:name, :count, :gender, :neighborhood)
+  set_allowed_columns(:name, :count, :gender, :neighborhood)
 
   @@valid_neighborhoods = %w{friedrichshain-kreuzberg
                              standesamt_i
