@@ -31,7 +31,7 @@ Style/AlignHash:
   # table - left alignment of keys, hash rockets, and values
   #   'a'  => 2
   #   'bb' => 3
-  EnforcedHashRocketStyle: table
+  EnforcedHashRocketStyle: key
   # Alignment of entries using colon as separator. Valid values are:
   #
   # key - left alignment of keys
@@ -43,7 +43,7 @@ Style/AlignHash:
   # table - left alignment of keys and values
   #   a:  0
   #   bb: 1
-  EnforcedColonStyle: table
+  EnforcedColonStyle: key
 
 Style/AlignParameters:
   # Alignment of parameters in multi-line method calls.

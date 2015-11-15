@@ -13,7 +13,7 @@ end
 task :confirm_env do
   puts 'Verify your RACK_ENV! Are you sure you want to continue? [y/N]'
   input = STDIN.gets.chomp
-  raise NO unless input.downcase == 'y'
+  fail NO unless input.downcase == 'y'
 end
 
 namespace :db do

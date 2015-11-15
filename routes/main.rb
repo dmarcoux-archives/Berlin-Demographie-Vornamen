@@ -1,4 +1,4 @@
-class BDV_App < Sinatra::Application
+class BDVApp < Sinatra::Application
   helpers RoutesUtils
 
   before %r{^/names/([0-9]+)$} do |id|
