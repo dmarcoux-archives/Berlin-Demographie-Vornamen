@@ -67,3 +67,6 @@ Style/AlignParameters:
 Style/MultilineOperationIndentation:
   # Indentation of the right hand side operand in binary operations that span more than one line
   EnforcedStyle: indented
+
+Metrics/LineLength:
+  Max: 100
