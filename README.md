@@ -25,6 +25,7 @@ I took the data on this website http://daten.berlin.de/kategorie/demographie, mo
 
 ##Specs
 
+Run specs with `RACK_ENV=test bundle exec rake test`. Setting the environment variable `RACK_ENV` isn't mandatory, but you should always set it if you don't want to alter your development database.
 
 ##Rubocop
 
