@@ -1,8 +1,11 @@
+# TODO: Get rid of global variables. Use instance variables instead
+# TODO: Extract @@columns_sanitization to a mixin and extend this class instead
+# TODO: Extract @@common_filters to a mixin and extend this class instead
 class Name < Sequel::Model
   self.raise_on_save_failure = false
   set_allowed_columns(:name, :count, :gender, :neighborhood)
 
-  @@valid_neighborhoods = %w{friedrichshain-kreuzberg
+  @@valid_neighborhoods = %w(friedrichshain-kreuzberg
                              standesamt_i
                              lichtenberg
                              mitte
@@ -14,7 +17,7 @@ class Name < Sequel::Model
                              charlottenburg-wilmersdorf
                              treptow-koepenick
                              neukoelln
-                             steglitz-zehlendorf}
+                             steglitz-zehlendorf)
 
   # Used when sanitizing user input
   @@columns_sanitization = {

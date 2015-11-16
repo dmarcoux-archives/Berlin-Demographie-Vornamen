@@ -9,7 +9,8 @@ unless ENV['RACK_ENV'] == 'production'
   Dotenv.load(Dir.pwd << '/.env', Dir.pwd << "/.env.#{ENV['RACK_ENV']}")
 end
 
-# Bundler.require calls must be separate as the environment variable RACK_ENV might have been set with dotenv
+# Bundler.require calls must be separate
+# as the environment variable RACK_ENV might have been set with dotenv
 Bundler.require(ENV['RACK_ENV'].to_sym)
 
 require './app.rb'
