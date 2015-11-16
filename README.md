@@ -20,8 +20,9 @@ I am learning Sinatra with this project. I chose to build an API and I don't hav
 I took the data on this website http://daten.berlin.de/kategorie/demographie, more specifically the CSV files under *Liste der häufigen Vornamen 2014*. It lists the newborn names separated by sex and broken down by the neighborhoods.
 
 #Usage
-##Server
+##Application
 
+Run the application with `bundle exec rackup`.
 
 ##Specs
 
