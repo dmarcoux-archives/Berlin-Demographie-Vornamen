@@ -12,19 +12,21 @@ describe Name do
   end
 
   describe '#validates_neighborhood' do
-    let(:valid_neighborhoods) { %w{friedrichshain-kreuzberg
-                                       standesamt_i
-                                       lichtenberg
-                                       mitte
-                                       reinickendorf
-                                       tempelhof-schoeneberg
-                                       marzahn-hellersdorf
-                                       pankow
-                                       spandau
-                                       charlottenburg-wilmersdorf
-                                       treptow-koepenick
-                                       neukoelln
-                                       steglitz-zehlendorf} }
+    let(:valid_neighborhoods) do
+      %w(friedrichshain-kreuzberg
+         standesamt_i
+         lichtenberg
+         mitte
+         reinickendorf
+         tempelhof-schoeneberg
+         marzahn-hellersdorf
+         pankow
+         spandau
+         charlottenburg-wilmersdorf
+         treptow-koepenick
+         neukoelln
+         steglitz-zehlendorf)
+    end
 
     describe 'when neighborhood is nil or an empty string' do
       it do

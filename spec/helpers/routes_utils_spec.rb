@@ -58,12 +58,12 @@ describe RoutesUtils do
         end
 
         it "returns the sanitized allowed columns which were present in the 'params' hash" do
-          @module.sanitize_params(@model, @params).must_equal ({ col1: 123 })
+          @module.sanitize_params(@model, @params).must_equal(col1: 123)
         end
 
         describe "with the argument 'all' set to true" do
           it "returns all the sanitized allowed columns and the ones who were missing, have their type's default value" do
-            @module.sanitize_params(@model, @params, true).must_equal ({ col1: 123, col2: '' })
+            @module.sanitize_params(@model, @params, true).must_equal(col1: 123, col2: '')
           end
         end
       end
@@ -147,10 +147,10 @@ describe RoutesUtils do
 
       describe 'when passing a path_info containing common filters for the model' do
         it 'returns an array containing the filters which are present in the path_info' do
-          @module.path_params(@model, '/path/filter1').must_equal ([{ col1: '1' }])
-          @module.path_params(@model, '/path/filter2').must_equal ([{ col2: '2' }])
-          @module.path_params(@model, '/path/filter1/filter999').must_equal ([{ col1: '1' }])
-          @module.path_params(@model, '/path/filter1/filter2').must_equal ([{ col1: '1' }, { col2: '2' }])
+          @module.path_params(@model, '/path/filter1').must_equal [{ col1: '1' }]
+          @module.path_params(@model, '/path/filter2').must_equal [{ col2: '2' }]
+          @module.path_params(@model, '/path/filter1/filter999').must_equal [{ col1: '1' }]
+          @module.path_params(@model, '/path/filter1/filter2').must_equal [{ col1: '1' }, { col2: '2' }]
         end
       end
     end
