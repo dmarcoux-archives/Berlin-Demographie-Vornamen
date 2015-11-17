@@ -5,7 +5,7 @@ describe RoutesUtils do
     @module = Class.new { extend RoutesUtils }
 
     @model = Class.new(Sequel::Model) do
-      def self.set_columns_sanitization(h)
+      def self.columns_sanitization=(h)
         @@columns_sanitization = h
       end
 
@@ -13,7 +13,7 @@ describe RoutesUtils do
         @@columns_sanitization
       end
 
-      def self.set_common_filters(h)
+      def self.common_filters=(h)
         @@common_filters = h
       end
 
@@ -38,7 +38,7 @@ describe RoutesUtils do
 
     describe 'a model with columns_sanitization' do
       before do
-        @model.set_columns_sanitization({ col1: :to_i, col2: :to_s })
+        @model.columns_sanitization = { col1: :to_i, col2: :to_s }
 
         # Using String keys to simulate Sinatra params hash
         @params = { 'col1' => '123', 'col3' => 'Derp' }
@@ -130,7 +130,7 @@ describe RoutesUtils do
 
     describe 'a model with common_filters' do
       before do
-        @model.set_common_filters({ filter1: { col1: '1' }, filter2: { col2: '2' } })
+        @model.common_filters = { filter1: { col1: '1' }, filter2: { col2: '2' } }
       end
 
       describe 'when passing an empty path_info' do

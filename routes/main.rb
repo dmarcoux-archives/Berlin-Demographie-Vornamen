@@ -10,7 +10,8 @@ class BDVApp < Sinatra::Application
       halt
     end
 
-    unless @name = Name.find(id: id)
+    # @name is used in actions called after this before filter
+    unless (@name = Name.find(id: id))
       status 404
       @body = { message: 'Not found', description: "Name ##{id} doesn't exist" }
       halt
@@ -18,7 +19,7 @@ class BDVApp < Sinatra::Application
   end
 
   # Retrieve a list of names
-  get /^\/names(\/[a-z\-\_]+)*$/ do
+  get %r{^\/names(\/[a-z\-\_]+)*$} do
     names = DB[:names]
 
     # Query string parameters
@@ -57,7 +58,7 @@ class BDVApp < Sinatra::Application
   end
 
   # Retrieve a specific name
-  get /^\/names\/[0-9]+$/ do
+  get %r{^\/names\/[0-9]+$} do
     status 200
     @body = @name
   end
@@ -69,7 +70,7 @@ class BDVApp < Sinatra::Application
     name = Name.new(s_params)
     if name.save
       status 200
-      headers ({ 'location' => "#{request.base_url}#{request.path_info}/#{name.id}" })
+      headers 'location' => "#{request.base_url}#{request.path_info}/#{name.id}"
       @body = name
     else
       status 422

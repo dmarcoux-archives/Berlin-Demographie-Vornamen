@@ -3,7 +3,7 @@ require_relative '../spec_helper'
 describe Sequel::Model do
   before do
     @c = Class.new(Sequel::Model) do
-      def self.set_validations(&block)
+      def self.validations=(block)
         define_method(:validate, &block)
       end
 
@@ -17,7 +17,7 @@ describe Sequel::Model do
   describe '#validates_greater_than' do
     describe 'a column which is of type Integer' do
       before do
-        @c.set_validations { validates_greater_than(5, :value) }
+        @c.validations = -> { validates_greater_than(5, :value) }
       end
 
       describe 'having a value smaller than the value received' do
@@ -44,7 +44,7 @@ describe Sequel::Model do
 
     describe "a column which isn't of type Integer" do
       it 'must raise a Sequel::Error::InvalidOperation exception' do
-        @c.set_validations { validates_greater_than(5, :value) }
+        @c.validations = -> { validates_greater_than(5, :value) }
         proc { @m.valid? }.must_raise Sequel::Error::InvalidOperation
 
         @m.value = '123'
