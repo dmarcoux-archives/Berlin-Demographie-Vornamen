@@ -1,5 +1,5 @@
 # TODO: Get rid of global variables. Use instance variables instead
-# TODO: Extract @@columns_sanitization to a mixin and extend this class instead
+# TODO: Extract @@columns_sanitization to a mixin and extend this class instead. This might be replaced by typecast_on_assignment from Sequel::Model, it seems to be already built-in
 # TODO: Extract @@common_filters to a mixin and extend this class instead
 class Name < Sequel::Model
   self.raise_on_save_failure = false
