@@ -1,5 +1,4 @@
 # TODO: Get rid of global variables. Use instance variables instead
-# TODO: Extract @@columns_sanitization to a mixin and extend this class instead. This might be replaced by typecast_on_assignment from Sequel::Model, it seems to be already built-in
 # TODO: Extract @@common_filters to a mixin and extend this class instead
 class Name < Sequel::Model
   self.raise_on_save_failure = false
@@ -18,17 +17,6 @@ class Name < Sequel::Model
                              treptow-koepenick
                              neukoelln
                              steglitz-zehlendorf)
-
-  # Used when sanitizing user input
-  @@columns_sanitization = {
-    name: :to_s,
-    count: :to_i,
-    gender: :to_s,
-    neighborhood: :to_s
-  }
-  def self.columns_sanitization
-    @@columns_sanitization
-  end
 
   # Used to have aliases linked to certain columns' common values for this model. It can be used to have more verbose REST routes for example
   @@common_filters = {

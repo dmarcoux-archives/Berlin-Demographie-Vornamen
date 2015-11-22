@@ -4,6 +4,7 @@ gem 'rake'
 
 gem 'sinatra'
 gem 'sinatra-cross_origin'
+gem 'sinatra-param'
 
 gem 'pg'
 gem 'sequel'

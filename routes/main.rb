@@ -1,5 +1,5 @@
 class BDVApp < Sinatra::Application
-  helpers RoutesUtils
+  helpers Sinatra::Param, RoutesUtils
 
   before %r{^/names/([0-9]+)$} do |id|
     id = id.to_i
@@ -20,20 +20,22 @@ class BDVApp < Sinatra::Application
 
   # Retrieve a list of names
   get %r{^\/names(\/[a-z\-\_]+)*$} do
+    # TODO: See if it is possible to extract these 'param ...' lines to make this method shorter
+    # Filters
+    param :name, String, default: ''
+    param :count, Integer, default: 0
+    param :gender, String, default: ''
+    param :neighborhood, String, default: ''
+
+    # Pagination
+    param :offset, Integer, default: 0, min: 0
+    param :limit, Integer, default: 100, min: 0, max: 100
+
     names = DB[:names]
-
-    # Query string parameters
-    p = sanitize_default_params(Name, params)
-
-    name = p[:name]
-    count = p[:count]
-    gender = p[:gender]
-    neighborhood = p[:neighborhood]
-
-    names = names.filter(name: name) unless name.empty?
-    names = names.filter(count: count) unless count <= 0
-    names = names.filter(gender: gender) unless gender.empty?
-    names = names.filter(neighborhood: neighborhood) unless neighborhood.empty?
+    names = names.filter(name: params[:name]) unless params[:name].empty?
+    names = names.filter(count: params[:count]) unless params[:count] <= 0
+    names = names.filter(gender: params[:gender]) unless params[:gender].empty?
+    names = names.filter(neighborhood: params[:neighborhood]) unless params[:neighborhood].empty?
 
     # In addition to query string parameters, path parameters can also be used to filter records; e.g. /names/male/mitte instead of /names?gender=m&neighborhood=mitte
     p_params = path_params(Name, request.path_info)
@@ -43,16 +45,12 @@ class BDVApp < Sinatra::Application
     s_params = sort_params(Name, params[:sort])
     s_params.each { |s_param| names = names.order_more(s_param) }
 
-    # Pagination parameters
-    limit = sanitize_limit_param(params[:limit])
-    offset = sanitize_offset_param(params[:offset])
-
     # Metadata
     names_count = names.count
 
     status 200
     @body = {
-      items: names.limit(limit).offset(offset).all,
+      items: names.limit(params[:limit]).offset(params[:offset]).all,
       count: names_count
     }
   end
@@ -65,6 +63,7 @@ class BDVApp < Sinatra::Application
 
   # Create a new name
   post '/names' do
+    # TODO Use Sinatra-Param
     s_params = sanitize_default_params(Name, params)
 
     name = Name.new(s_params)
@@ -80,6 +79,7 @@ class BDVApp < Sinatra::Application
 
   # Update a specific name
   put %r{^/names/([0-9]+)$} do |id|
+    # TODO Use Sinatra-Param
     s_params = sanitize_params(Name, params)
 
     if s_params.empty?
