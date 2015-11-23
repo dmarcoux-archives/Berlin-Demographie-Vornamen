@@ -1,3 +1,4 @@
+# TODO: Create route specs
 class BDVApp < Sinatra::Application
   helpers Sinatra::Param, RoutesUtils
 
@@ -63,8 +64,13 @@ class BDVApp < Sinatra::Application
 
   # Create a new name
   post '/names' do
-    # TODO Use Sinatra-Param
-    s_params = sanitize_default_params(Name, params)
+    param :name, String, default: ''
+    param :count, Integer, default: 0
+    param :gender, String, default: ''
+    param :neighborhood, String, default: ''
+
+    # TODO: Possibly extract this somewhere to avoid repetition
+    s_params = params.select { |k, _v| [:name, :count, :gender, :neighborhood].include?(k) }
 
     name = Name.new(s_params)
     if name.save
@@ -79,8 +85,13 @@ class BDVApp < Sinatra::Application
 
   # Update a specific name
   put %r{^/names/([0-9]+)$} do |id|
-    # TODO Use Sinatra-Param
-    s_params = sanitize_params(Name, params)
+    param :name, String
+    param :count, Integer
+    param :gender, String
+    param :neighborhood, String
+
+    # TODO: Possibly extract this somewhere to avoid repetition
+    s_params = params.select { |k, _v| [:name, :count, :gender, :neighborhood].include?(k) }
 
     if s_params.empty?
       status 400
