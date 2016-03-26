@@ -1,0 +1,7 @@
+.git
+.gitignore
+*.md
+
+# Taken from .gitignore
+.ruby-version
+/tmp

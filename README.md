@@ -4,12 +4,8 @@
 Learning Sinatra by building an API with PostgreSQL, Sequel, Dotenv and Minitest.
 ```
 
-####TODO
-1. Fix all Rubocop issues
-2. Setup CodeClimate
-3. Setup Guard
-4. Improve README.md with examples on how to run specs, run the server, etc...
-5. Setup Mutant
+**TODO**
+1. Add PostgreSQL to Docker/Docker Compose setup
 
 #Introduction
 
@@ -20,18 +16,14 @@ I am learning Sinatra with this project. I chose to build an API and I don't hav
 I took the data on this website http://daten.berlin.de/kategorie/demographie, more specifically the CSV files under *Liste der häufigen Vornamen 2014*. It lists the newborn names separated by sex and broken down by the neighborhoods.
 
 #Usage
-##Application
+## Docker
 
-Run the application with `bundle exec rackup`.
+Using Docker and Docker Compose simplifies development.
 
-##Specs
+### Application
 
-Run specs with `RACK_ENV=test bundle exec rake test`. Setting the environment variable `RACK_ENV` isn't mandatory, but you should always set it if you don't want to alter your development database.
+Run the application with `docker-compose up dev`
 
-##Rubocop
+### Specs
 
-
-##Guard
-
-
-##Mutant
+Run specs with `docker-compose up test`

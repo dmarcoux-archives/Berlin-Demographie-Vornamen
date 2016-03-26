@@ -8,17 +8,9 @@ unless ENV['RACK_ENV'] == 'production'
   Dotenv.overload(Dir.pwd << '/.env', Dir.pwd << "/.env.#{ENV['RACK_ENV']}")
 end
 
-# Prevent errors...
-# Idea from http://technotes.iangreenleaf.com/posts/confirmation-for-destructive-rake-tasks.html
-task :confirm_env do
-  puts 'Verify your RACK_ENV! Are you sure you want to continue? [y/N]'
-  input = STDIN.gets.chomp
-  fail NO unless input.downcase == 'y'
-end
-
 namespace :db do
   desc 'Clean the database by dropping all tables'
-  task clean: :confirm_env do
+  task :clean do
     require 'sequel'
     db = Sequel.connect(ENV['DATABASE_URL'])
     puts 'Cleaning the database'
