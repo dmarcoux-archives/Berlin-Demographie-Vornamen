@@ -4,6 +4,11 @@
 Learning Sinatra by building an API with PostgreSQL, Sequel and Minitest.
 ```
 
+**TODO**
+
+1. Get rid of `Sequel.migration` and use plain SQL instead
+2. Use plain SQL migration in the Docker Compose 'db' service (See section 'How to extend this image': https://hub.docker.com/_/postgres/)
+
 # Introduction
 
 I am learning Sinatra with this project. I chose to build an API and I don't have a specific list of things I want to accomplish. I simply want to learn by doing.

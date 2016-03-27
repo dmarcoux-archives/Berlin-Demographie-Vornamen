@@ -1,6 +1,12 @@
 require 'sequel'
 
-DB = Sequel.connect("postgres://#{ENV['POSTGRES_USER']}@#{ENV['POSTGRES_HOST']}:#{ENV['POSTGRES_PORT']}/#{ENV['POSTGRES_DB']}")
+DB = Sequel.postgres({
+                       database: "#{ENV['POSTGRES_DB']}",
+                       host: "#{ENV['POSTGRES_HOST']}",
+                       user: "#{ENV['POSTGRES_USER']}",
+                       pool_sleep_time: 0.5, # in seconds
+                       pool_timeout: 10 # in seconds
+                     })
 
 # Load plugins for all models
 Sequel::Model.plugin :json_serializer
