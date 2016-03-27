@@ -17,8 +17,6 @@ group :development, :test do
   gem 'pry'
   gem 'pry-nav'
 
-  gem 'dotenv'
-
   gem 'minitest'
   gem 'rack-test'
 end

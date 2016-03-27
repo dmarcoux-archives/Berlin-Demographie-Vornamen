@@ -5,7 +5,6 @@ GEM
     astrolabe (1.3.1)
       parser (~> 2.2)
     coderay (1.1.0)
-    dotenv (2.0.2)
     json (1.8.1)
     method_source (0.8.2)
     minitest (5.4.3)
@@ -50,7 +49,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  dotenv
   json
   minitest
   pg
@@ -63,6 +61,3 @@ DEPENDENCIES
   sinatra
   sinatra-cross_origin
   sinatra-param
-
-BUNDLED WITH
-   1.10.6

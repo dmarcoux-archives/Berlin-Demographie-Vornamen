@@ -1,15 +1,43 @@
-dev:
-  build: .
-  container_name: bdv-dev
-  environment:
-    - RACK_ENV=development
-  command: bundle exec rackup -o 0.0.0.0
-  ports:
-    - "9292:9292"
+version: '2'
+services:
+  db:
+    container_name: bdv-db
+    environment:
+      # Same as the service name
+      - POSTGRES_HOST=db
+      # Override default values in postgres Dockerfile
+      - POSTGRES_DB=bdv
+      - POSTGRES_USER=docker
+      - POSTGRES_PASSWORD=
+      # From EXPOSE in postgres Dockerfile
+      - POSTGRES_PORT=5432
+    image: postgres:9.5.1
+    ports:
+      - 5432:5432
 
-test:
-  build: .
-  container_name: bdv-test
-  environment:
-    - RACK_ENV=test
-  command: bundle exec rake test
+  development:
+    build: .
+    # With 0.0.0.0, it is available from outside
+    command: bundle exec rackup -o 0.0.0.0
+    container_name: bdv-development
+    environment:
+      - RACK_ENV=development
+    links:
+      - db:db
+    ports:
+      - 9292:9292
+    volumes:
+      # /app is the same as WORKDIR in Dockerfile
+      - .:/app
+
+  test:
+    build: .
+    command: bundle exec rake test
+    container_name: bdv-test
+    environment:
+      - RACK_ENV=test
+    links:
+      - db:db
+    volumes:
+      # /app is the same as WORKDIR in Dockerfile
+      - .:/app

@@ -1,11 +1,8 @@
 ```
 @dmarcoux/Berlin-Demographie-Vornamen
 
-Learning Sinatra by building an API with PostgreSQL, Sequel, Dotenv and Minitest.
+Learning Sinatra by building an API with PostgreSQL, Sequel and Minitest.
 ```
-
-**TODO**
-1. Add PostgreSQL to Docker/Docker Compose setup
 
 # Introduction
 
@@ -21,7 +18,7 @@ Using Docker and Docker Compose simplifies development.
 
 ## Application
 
-Run the application with `docker-compose up dev`
+Run the application with `docker-compose up development`
 
 ## Specs
 

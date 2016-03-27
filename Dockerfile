@@ -5,9 +5,7 @@ RUN mkdir app
 ENV APP_ROOT /app
 WORKDIR $APP_ROOT
 
-COPY .env \
-     .env.test \
-     .rubocop.yml \
+COPY .rubocop.yml \
      Gemfile \
      Gemfile.lock \
      Rakefile \
