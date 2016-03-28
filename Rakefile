@@ -5,17 +5,28 @@ namespace :db do
   desc 'Clean the database by dropping all tables'
   task :clean do
     require 'sequel'
-    db = Sequel.connect(ENV['DATABASE_URL']) # TODO: See what was done in models/init.rb
+    db = Sequel.postgres({
+                          database: "#{ENV['POSTGRES_DB']}",
+                          host: "#{ENV['POSTGRES_HOST']}",
+                          user: "#{ENV['POSTGRES_USER']}",
+                          pool_sleep_time: 0.5, # in seconds
+                          pool_timeout: 10 # in seconds
+                         })
     puts 'Cleaning the database'
     db.drop_table(:names, :schema_info)
   end
 
-  # TODO: For migrations, possible use db.run File.read('db/migrations/*.sql')
   desc 'Migrate the database'
   task :migrate, [:version] do |_t, args|
     require 'sequel'
     Sequel.extension :migration
-    db = Sequel.connect(ENV['DATABASE_URL']) # TODO: See what was done in models/init.rb
+    db = Sequel.postgres({
+                          database: "#{ENV['POSTGRES_DB']}",
+                          host: "#{ENV['POSTGRES_HOST']}",
+                          user: "#{ENV['POSTGRES_USER']}",
+                          pool_sleep_time: 0.5, # in seconds
+                          pool_timeout: 10 # in seconds
+                         })
     if args[:version]
       puts "Migrating the database to the version #{args[:version]}"
       Sequel::Migrator.run(db, 'db/migrations', target: args[:version].to_i)

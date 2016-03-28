@@ -1,6 +1,9 @@
 FROM ruby:2.2.0
 MAINTAINER Dany Marcoux
 
+# Default to UTF-8 file.encoding
+ENV LANG C.UTF-8
+
 RUN mkdir app
 ENV APP_ROOT /app
 WORKDIR $APP_ROOT

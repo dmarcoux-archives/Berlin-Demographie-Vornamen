@@ -3,7 +3,13 @@ require 'csv'
 require 'sequel'
 
 # Initialize the database
-Sequel.connect(ENV['DATABASE_URL'])
+Sequel.postgres({
+                 database: "#{ENV['POSTGRES_DB']}",
+                 host: "#{ENV['POSTGRES_HOST']}",
+                 user: "#{ENV['POSTGRES_USER']}",
+                 pool_sleep_time: 0.5, # in seconds
+                 pool_timeout: 10 # in seconds
+                })
 
 # Then we can load the Name model
 require_relative '../../models/name'

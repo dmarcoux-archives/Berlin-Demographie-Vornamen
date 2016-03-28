@@ -8,9 +8,6 @@ services:
     ports:
       # From EXPOSE in postgres Dockerfile
       - 5432:5432
-    volumes:
-      # *.sql files will be executed when creating the service's container
-      - ./db/migrations/:/docker-entrypoint-initdb.d/
 
   development:
     build: .

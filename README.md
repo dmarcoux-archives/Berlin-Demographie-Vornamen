@@ -6,8 +6,9 @@ Learning Sinatra by building an API with PostgreSQL, Sequel and Minitest.
 
 **TODO**
 
-1. service for test database (change rake tasks under namespace db)
-2. db/seeds in plain SQL for development database
+1. Automate DB migrations and seeds.
+  * .sql files under /docker-entrypoint-initdb.d/ in postgres image
+  * Sequel migrations run plain SQL [here](http://sequel.jeremyevans.net/rdoc/files/doc/migration_rdoc.html#label-Schema+methods), look for 'If you need to drop down to SQL to execute some database specific code'
 
 # Introduction
 
@@ -24,6 +25,10 @@ Using Docker and Docker Compose simplifies development.
 ## Application
 
 Run the application with `docker-compose up development`
+
+## Migrations
+
+Run migrations with `docker-compose run SERVICE_NAME bundle exec rake db:migrate`. Needed for development and test.
 
 ## Specs
 
