@@ -6,8 +6,8 @@ Learning Sinatra by building an API with PostgreSQL, Sequel and Minitest.
 
 **TODO**
 
-1. Get rid of `Sequel.migration` and use plain SQL instead
-2. Use plain SQL migration in the Docker Compose 'db' service (See section 'How to extend this image': https://hub.docker.com/_/postgres/)
+1. service for test database (change rake tasks under namespace db)
+2. db/seeds in plain SQL for development database
 
 # Introduction
 

@@ -5,16 +5,17 @@ namespace :db do
   desc 'Clean the database by dropping all tables'
   task :clean do
     require 'sequel'
-    db = Sequel.connect(ENV['DATABASE_URL'])
+    db = Sequel.connect(ENV['DATABASE_URL']) # TODO: See what was done in models/init.rb
     puts 'Cleaning the database'
     db.drop_table(:names, :schema_info)
   end
 
+  # TODO: For migrations, possible use db.run File.read('db/migrations/*.sql')
   desc 'Migrate the database'
   task :migrate, [:version] do |_t, args|
     require 'sequel'
     Sequel.extension :migration
-    db = Sequel.connect(ENV['DATABASE_URL'])
+    db = Sequel.connect(ENV['DATABASE_URL']) # TODO: See what was done in models/init.rb
     if args[:version]
       puts "Migrating the database to the version #{args[:version]}"
       Sequel::Migrator.run(db, 'db/migrations', target: args[:version].to_i)
